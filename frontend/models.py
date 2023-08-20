@@ -10,7 +10,7 @@ class Slider(models.Model):
 
 
     def __str__(self):
-        return self.title
+        return self.title + " <-> " + str(self.order)
 
     class Meta:
         db_table = 'sliders'
