@@ -1,0 +1,6 @@
+{% load static %}
+<div class="post-entry-1">
+    <a href="single-post.html"><img src="{{ post.image.url }}" alt="" class="img-fluid"></a>
+    <div class="post-meta"><span class="date">{{ post.category.title }}</span> <span class="mx-1">&bullet;</span> <span>{{ post.created_at | date:"M d y" }}</span></div>
+    <h2><a href="single-post.html">{{ post.title }}</a></h2>
+</div>

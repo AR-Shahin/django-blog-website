@@ -11,7 +11,10 @@
       <nav id="navbar" class="navbar">
         <ul>
           <li><a href="/">Blog</a></li>
-          <li><a href="{% url 'frontend:single' %}">Single Post</a></li>
+          {% comment %}
+            <li><a href="{% url 'frontend:single' id=1 %}">Single Post</a></li>
+          {% endcomment %}
+
           <li class="dropdown"><a href="{% url 'frontend:category' %}"><span>Categories</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
             <ul>
               <li><a href="{% url 'frontend:search' %}">Search Result</a></li>

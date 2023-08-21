@@ -12,6 +12,6 @@ urlpatterns = [
     path("about", AboutView.as_view(),name="about"),
     path("contact", ContactView.as_view(),name="contact"),
     path("category", CategoryView.as_view(),name="category"),
-    path("single", SingleView.as_view(),name="single"),
+    path("single/<slug:slug>", SingleView.as_view(),name="single"),
     path("search", SearchView.as_view(),name="search"),
 ]
