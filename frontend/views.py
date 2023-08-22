@@ -80,7 +80,7 @@ class BlogView(ListView):
     model = Post
     template_name = "frontend/pages/blog.html"
     context_object_name = 'posts'  
-    paginate_by = 1 
+    paginate_by = 4
     
     
     def get(self, request, *args, **kwargs):
@@ -93,3 +93,18 @@ class BlogView(ListView):
     def handle_page_out_of_range(self, request):
 
         return render(request, 'frontend/errors/out_of_range.html', status=404)
+    
+    def get_queryset(self):
+       
+        return self.model.objects.order_by('-created_at')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['popular_posts'] = self.model.objects.select_related("category").filter(view__gte=5).all()[:5]
+        context['trending_posts'] = self.model.objects.select_related("category").filter(trending=True).all()[:5]
+        context['latest_posts'] = self.model.objects.select_related("category").order_by("-created_at").all()[:5]
+        context["categories"] = Category.objects.all()
+        context["tags"] = Tag.objects.all()
+
+        return context
