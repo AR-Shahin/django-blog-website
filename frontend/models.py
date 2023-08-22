@@ -24,7 +24,7 @@ class Slider(models.Model):
 class Category(models.Model):
     title = models.CharField(max_length=100,name="title")
     slug = models.CharField(max_length=100,name="slug")
-    image = models.ImageField(name="image",upload_to='images/category/',null=True)
+    image = models.ImageField(name="image",upload_to='images/category/',null=True, blank=True)
 
 
     def __str__(self):
@@ -74,7 +74,7 @@ class Post(models.Model):
     slug = models.SlugField(max_length=100,name="slug",unique=True)
     view = models.IntegerField(default=0)
     status = models.BooleanField(default=True)
-    image = models.ImageField(name="image",upload_to='images/posts/',null=True)
+    image = models.ImageField(name="image",upload_to='images/posts/',null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     description = models.TextField()
     trending = models.BooleanField(default=False)
@@ -105,3 +105,20 @@ class Post(models.Model):
         managed = True
         verbose_name = 'Post'
         verbose_name_plural = 'posts'
+
+
+class Contact(models.Model):
+    
+    name = models.CharField(name="name",max_length=200,)
+    email = models.EmailField(name="email")
+    subject = models.CharField(name="subject",max_length=200,)
+    status = models.BooleanField(name="status",default=False)
+    message = models.TextField(name="message")
+    class Meta:
+        db_table = 'contacts'
+        managed = True
+        verbose_name = 'Contact'
+        verbose_name_plural = 'contacts'
+        
+    def __str__(self):
+        return self.subject

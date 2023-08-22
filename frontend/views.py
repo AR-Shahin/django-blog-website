@@ -4,8 +4,9 @@ import random
 from django.http import Http404
 from django.shortcuts import render
 from django.core.paginator import Paginator
-from django.views.generic import TemplateView,DetailView,ListView
+from django.views.generic import TemplateView,DetailView,ListView,CreateView
 from .models import *
+from .form import *
 
 
 
@@ -33,6 +34,9 @@ class HomeView(TemplateView):
         
         context["first_post"] = context["latest_posts"][random.randint(0, 2)]
         
+        context["ars"] = "Shahin"
+        
+        
             
         return context
     
@@ -52,16 +56,39 @@ class SingleView(DetailView):
 
         return context
     
+    
+    def get(self, request, *args, **kwargs):
+        try:
+            return super().get(request, *args, **kwargs)
+        except Http404:
+            
+            return self.handle_page_out_of_range(request)
+        
+    def handle_page_out_of_range(self, request):
+
+        return render(request, 'frontend/errors/out_of_range.html', status=404) 
 
 class AboutView(TemplateView):
         
     template_name = "frontend/pages/about.html"
 
 
-class ContactView(TemplateView):
-        
+class ContactView(CreateView):
+    model = Contact
+    form_class = ContactUsForm
     template_name = "frontend/pages/contact.html"
+    success_url = '/contact'
     
+    def form_valid(self, form):
+        # I can add here custom logic
+        name = form.cleaned_data['name']
+        email = form.cleaned_data['email']
+        message = form.cleaned_data['message']
+        
+        # Add your logic here to do something with the form data
+        print(f"Name: {name}, Email: {email}, Message: {message}")
+
+        return super().form_valid(form)
     
 class CategoryView(TemplateView):
     
