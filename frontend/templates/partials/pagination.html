@@ -1,0 +1,27 @@
+
+{% if page_obj.has_other_pages %}
+<div class="custom-pagination">
+      {% if page_obj.number == 1 %}
+        <a  class="prev disabled">Previous</a>
+      {% else %}
+        <a href="?page={{ page_obj.previous_page_number }}" class="prev">Previous</a>
+      {% endif %}
+   
+  {% for item in page_obj.paginator.page_range %}
+    <a href="?page={{ item }}"
+    class="
+    {% if item == page_obj.number  %}
+        active
+    {% endif %}
+    "
+    >{{ item }}</a>
+  {% endfor %}
+  
+
+    {% if page_obj.paginator.num_pages == page_obj.number %}
+      <a  class="next disabled">Next</a>
+    {% else %}
+      <a href="?page={{ page_obj.next_page_number }}" class="next">Next</a>
+    {% endif %}
+</div>
+{% endif %}

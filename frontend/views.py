@@ -1,7 +1,10 @@
+
 from typing import Any
 import random
+from django.http import Http404
 from django.shortcuts import render
-from django.views.generic import TemplateView,DetailView
+from django.core.paginator import Paginator
+from django.views.generic import TemplateView,DetailView,ListView
 from .models import *
 
 
@@ -69,3 +72,24 @@ class CategoryView(TemplateView):
 class SearchView(TemplateView):
     
     template_name = "frontend/pages/search.html"
+
+
+
+class BlogView(ListView):
+    
+    model = Post
+    template_name = "frontend/pages/blog.html"
+    context_object_name = 'posts'  
+    paginate_by = 1 
+    
+    
+    def get(self, request, *args, **kwargs):
+        try:
+            return super().get(request, *args, **kwargs)
+        except Http404:
+            
+            return self.handle_page_out_of_range(request)
+
+    def handle_page_out_of_range(self, request):
+
+        return render(request, 'frontend/errors/out_of_range.html', status=404)
