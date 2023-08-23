@@ -4,14 +4,21 @@ from django.core.cache import cache
 from django.http import Http404
 from django.shortcuts import render
 from django.core.paginator import Paginator
+from django.views import View
 from django.views.generic import TemplateView,DetailView,ListView,CreateView
 from .models import *
 from .form import *
 from .seeder import *
 
+class CommonView(TemplateView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = Category.objects.all().order_by("-id")
+        return context
+    pass
+    
 
-
-class HomeView(TemplateView):
+class HomeView(CommonView,TemplateView):
    
     cache.clear()
     # run_seeder(delete=True)
@@ -29,7 +36,7 @@ class HomeView(TemplateView):
         
         context = super().get_context_data(**kwargs)
         
-        context["categories"] = Category.objects.all()
+        # context["categories"] = Category.objects.all().order_by("-id")
         
         context["second_section"] = context["categories"][1]
         third_section = context["categories"][2]
@@ -79,7 +86,7 @@ class SingleView(DetailView):
 
         return render(request, 'frontend/errors/out_of_range.html', status=404) 
 
-class AboutView(TemplateView):
+class AboutView(CommonView,TemplateView):
         
     template_name = "frontend/pages/about.html"
 

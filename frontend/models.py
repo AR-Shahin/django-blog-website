@@ -42,7 +42,7 @@ class Category(models.Model):
 class SubCategory(models.Model):
     title = models.CharField(max_length=100,name="title")
     slug = models.CharField(max_length=100,name="slug")
-    category = models.ForeignKey(Category, on_delete=models.CASCADE,related_name="sub_categories")
+    category = models.ForeignKey(Category, on_delete=models.CASCADE,related_name='sub_categories')
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title) 
