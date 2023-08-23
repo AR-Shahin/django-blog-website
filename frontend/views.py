@@ -145,11 +145,32 @@ class CategoryWisePostView(ListView):
             
             return handle_404_page(request)
 
+
+class SubCategoryWisePostView(ListView):
+    context_object_name = 'posts'  
+    paginate_by = 10
+    template_name = "frontend/pages/category.html"
+    
+    def get_queryset(self):
+        category_slug = self.kwargs['subcategory_slug']
+        self.category = get_object_or_404(SubCategory, slug=category_slug)
+        queryset = Post.objects.filter(sub_category=self.category).order_by("-created_at")
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = self.category
+        return context
+    def get(self, request, *args, **kwargs):
+        try:
+            return super().get(request, *args, **kwargs)
+        except Http404:
+            
+            return handle_404_page(request)
     
 class SearchView(TemplateView):
     
     template_name = "frontend/pages/search.html"
-
 
 
 class BlogView(ListView):

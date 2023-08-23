@@ -13,6 +13,7 @@ urlpatterns = [
     path("blogs", BlogView.as_view(),name="blog"),
     path("contact", ContactView.as_view(),name="contact"),
     path("category/<slug:category_slug>", CategoryWisePostView.as_view(),name="category"),
+    path("sub-category/<slug:subcategory_slug>", SubCategoryWisePostView.as_view(),name="sub_category"),
     path("single/<slug:slug>", SingleView.as_view(),name="single"),
     path("search", SearchView.as_view(),name="search"),
 ]
