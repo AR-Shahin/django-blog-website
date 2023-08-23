@@ -1,8 +1,9 @@
 
 from typing import Any
+from django.shortcuts import get_object_or_404,render
 from django.core.cache import cache
 from django.http import Http404
-from django.shortcuts import render
+
 from django.core.paginator import Paginator
 from django.views import View
 from django.views.generic import TemplateView,DetailView,ListView,CreateView
@@ -67,9 +68,7 @@ class HomeView(TemplateView):
         
         print(context["second_top_post"])
         
-        
-        
-            
+         
         return context
     
 class SingleView(DetailView):
@@ -122,10 +121,29 @@ class ContactView(CreateView):
 
         return super().form_valid(form)
     
-class CategoryView(TemplateView):
+class CategoryWisePostView(ListView):
     
+    model = Post
+    context_object_name = 'posts'  
+    paginate_by = 10
     template_name = "frontend/pages/category.html"
     
+    def get_queryset(self):
+        category_slug = self.kwargs['category_slug']
+        self.category = get_object_or_404(Category, slug=category_slug)
+        queryset = Post.objects.filter(category=self.category).order_by("-created_at")
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = self.category
+        return context
+    def get(self, request, *args, **kwargs):
+        try:
+            return super().get(request, *args, **kwargs)
+        except Http404:
+            
+            return handle_404_page(request)
 
     
 class SearchView(TemplateView):

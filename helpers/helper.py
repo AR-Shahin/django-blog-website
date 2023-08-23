@@ -1,4 +1,5 @@
 import random
+from django.shortcuts import render
 from django.db.models import Min,Max
 from django.db.models import Model
 
@@ -13,4 +14,6 @@ def get_min_pk(model: Model): return model.objects.aggregate(min_pk=Min('pk'))['
 def get_max_pk(model: Model): return model.objects.aggregate(Max('pk'))['pk__max']
     
 
-    
+def handle_404_page(request):
+
+    return render(request, 'frontend/errors/404.html', status=404) 
