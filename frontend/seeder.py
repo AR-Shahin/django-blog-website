@@ -65,15 +65,18 @@ def create_tag():
 
 def create_posts():
     
-    for post in POSTS:
-        p = Post.objects.create(
-            category = post["category"],
-            sub_category = post["sub_category"],
-            title = post["title"],
-            description = post["description"],
-            image = post["image"],
-        )
-        p.tags.set(post["tags"])
+    for i in range(0,20):
+        for post in POSTS:
+            p = Post.objects.create(
+                category = post["category"],
+                sub_category = post["sub_category"],
+                title = post["title"] + "-" + str(rand_int(1,1000))  + "-" + str(rand_int(1,1000)),
+                description = post["description"],
+                image = POST_IMAGES[rand_int(0,(len(POST_IMAGES) - 1))],
+                trending = post["trending"],
+                view = rand_int(1,20),
+            )
+            p.tags.set(post["tags"])
 
 
         
@@ -85,13 +88,14 @@ def delete_all_data():
     SubCategory.objects.all().delete()
     Tag.objects.all().delete()
     Post.objects.all().delete()
+    
 
 def run_seeder(delete=False):
     if delete:
         delete_all_data()
 
-    create_slider()
-    create_category()
-    create_sub_category()
-    create_tag()
-    create_posts()
+    # create_slider()
+    # create_category()
+    # create_sub_category()
+    # create_tag()
+    # create_posts()

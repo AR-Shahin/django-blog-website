@@ -14,6 +14,7 @@ from .seeder import *
 class HomeView(TemplateView):
    
     cache.clear()
+    # run_seeder(delete=True)
     # create_slider()
     # create_category()
     # create_sub_category()
@@ -117,7 +118,7 @@ class BlogView(ListView):
     model = Post
     template_name = "frontend/pages/blog.html"
     context_object_name = 'posts'  
-    paginate_by = 4
+    paginate_by = 15
     
     
     def get(self, request, *args, **kwargs):
