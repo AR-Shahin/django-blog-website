@@ -9,7 +9,7 @@ class Slider(models.Model):
     order = models.IntegerField(name="order",default=0)
     status = models.BooleanField(name="status",default=True)
     content = models.TextField(name="content")
-    image = models.ImageField(name="image",upload_to='images/sliders/')
+    image = models.ImageField(name="image",upload_to='images/sliders/',blank=True,null=True)
 
 
     def __str__(self):
@@ -22,7 +22,7 @@ class Slider(models.Model):
         verbose_name_plural = 'Sliders'
         
 class Category(models.Model):
-    title = models.CharField(max_length=100,name="title")
+    title = models.CharField(max_length=100,name="title",unique=True)
     slug = models.CharField(max_length=100,name="slug")
     image = models.ImageField(name="image",upload_to='images/category/',null=True, blank=True)
 
@@ -30,6 +30,9 @@ class Category(models.Model):
     def __str__(self):
         return self.title
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title) 
+        super(Category, self).save(*args, **kwargs)
     class Meta:
         db_table = 'categories'
         managed = True
@@ -41,6 +44,9 @@ class SubCategory(models.Model):
     slug = models.CharField(max_length=100,name="slug")
     category = models.ForeignKey(Category, on_delete=models.CASCADE,related_name="sub_categories")
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title) 
+        super(SubCategory, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title
@@ -52,9 +58,12 @@ class SubCategory(models.Model):
         verbose_name_plural = 'sub_categories'
         
 class Tag(models.Model):
-    name = models.CharField(max_length=100,name="name")
+    name = models.CharField(max_length=100,name="name",unique=True)
     slug = models.CharField(max_length=100,name="slug")
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name) 
+        super(Tag, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -70,7 +79,7 @@ class Post(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE,related_name="posts")
     sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE,related_name="posts",null=True)
     tags = models.ManyToManyField(Tag,related_name="posts")
-    title = models.CharField(max_length=100,name="title",unique=True)
+    title = models.CharField(max_length=100,name="title")
     slug = models.SlugField(max_length=100,name="slug",unique=True)
     view = models.IntegerField(default=0)
     status = models.BooleanField(default=True)

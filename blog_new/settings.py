@@ -10,10 +10,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 TEMPLATES_DIR = BASE_DIR  +  "/templates"
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '17h#n1gb-kc$%b^pa*eolbok&d_56g9vpx%^l@(o9btu#^vh)d'
 
 # SECURITY WARNING: don't run with debug turned on in production!
