@@ -18,7 +18,7 @@ class CommonView(TemplateView):
     pass
     
 
-class HomeView(CommonView,TemplateView):
+class HomeView(TemplateView):
    
     cache.clear()
     # run_seeder(delete=True)
@@ -36,23 +36,37 @@ class HomeView(CommonView,TemplateView):
         
         context = super().get_context_data(**kwargs)
         
-        # context["categories"] = Category.objects.all().order_by("-id")
+        context["categories"] = Category.objects.all().order_by("-id")
+        context["sliders"] = Slider.objects.filter(status=True).all().order_by("order")
         
         context["second_section"] = context["categories"][1]
         third_section = context["categories"][2]
         # fourth_section = context["categories"][3]
         
         all_posts = Post.objects.select_related("category").order_by("-created_at")
-        context["second_section_posts"] = all_posts.filter(category=context["second_section"].id).all()
+        
+        
      
-        context["sliders"] = Slider.objects.filter(status=True).all().order_by("order")
+        
+        # First Section
         context["latest_posts"] = Post.objects.select_related("category").order_by("-created_at")[:3]
         context["latest_posts_more"] = Post.objects.order_by("-created_at")[3:6]
         context["trending_posts"] = Post.objects.filter(trending=True).order_by("-created_at")[:5]
-        
         context["first_post"] = context["latest_posts"][random.randint(0, 2)]
+        # End First Section
         
-        context["ars"] = "Shahin"
+        # Second Section
+        context["second_section"] = context["categories"][1]
+        context["second_section_posts"] = all_posts.filter(category=context["second_section"].id).all()
+        number_of_second_post =  context["second_section_posts"].count()
+        context["second_top_post"] = context["second_section_posts"][random.randint(0,number_of_second_post-1 )]
+        context["second_side_post"] = context["second_section_posts"][random.randint(0,number_of_second_post -1 )]
+        context["second_middle_post"] = context["second_section_posts"][random.randint(0,number_of_second_post-1 )]
+        
+        # End Second Section
+        
+        print(context["second_top_post"])
+        
         
         
             

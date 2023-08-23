@@ -65,18 +65,22 @@ def create_tag():
 
 def create_posts():
     
-    for i in range(0,20):
+    for i in range(0,60):
         for post in POSTS:
             p = Post.objects.create(
-                category = post["category"],
-                sub_category = post["sub_category"],
+                category = Category.objects.get(pk=rand_int(get_min_pk(Category),get_max_pk(Category))),
+                sub_category = SubCategory.objects.get(pk=rand_int(get_min_pk(SubCategory),get_max_pk(SubCategory))),
                 title = post["title"] + "-" + str(rand_int(1,1000))  + "-" + str(rand_int(1,1000)),
                 description = post["description"],
                 image = POST_IMAGES[rand_int(0,(len(POST_IMAGES) - 1))],
                 trending = post["trending"],
                 view = rand_int(1,20),
             )
-            p.tags.set(post["tags"])
+            p.tags.set([
+            Tag.objects.get(pk=rand_int(get_min_pk(Tag),get_max_pk(Tag))),
+            Tag.objects.get(pk=rand_int(get_min_pk(Tag),get_max_pk(Tag))),
+            Tag.objects.get(pk=rand_int(get_min_pk(Tag),get_max_pk(Tag))),
+            ])
 
 
         
